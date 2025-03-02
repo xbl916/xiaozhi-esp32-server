@@ -6,6 +6,25 @@ on:
       - 'v*.*.*'  # 只在以 v 开头的标签推送时触发，例如 v1.0.0
 
 jobs:
+
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 清理 Docker
+        run: docker system prune -af --volumes
+
+      - name: 清理 APT 缓存
+        run: sudo apt-get clean && sudo apt-get autoremove -y
+
+      - name: 清理 npm 缓存
+        run: npm cache clean --force
+
+      - name: 清理 Python 缓存
+        run: pip cache purge
+
+      - name: 删除不必要的文件
+        run: rm -rf ~/.cache
+
   release:
     name: Release Docker image
     runs-on: ubuntu-latest
